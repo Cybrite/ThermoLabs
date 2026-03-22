@@ -18,8 +18,7 @@ double JouleThomsonSimulation::compute_muJT(double T, double P) {
 }
 
 // Constructor
-JouleThomsonSimulation::JouleThomsonSimulation(double inletP, double outletP,
-                                 double temp, double dt, double t_total) {
+JouleThomsonSimulation::JouleThomsonSimulation(double inletP, double outletP, double temp, double dt, double t_total) {
     P1 = inletP;
     P2 = outletP;
     T = temp;
