@@ -6,13 +6,18 @@ import {
   hasProfessorRole,
   hasStudentRole,
   roleIdFor,
-  roleLabel,
   type RoleName,
 } from "./auth/roles";
 import {
   getStoredPreferredRole,
   setStoredPreferredRole,
 } from "./auth/preferredRole";
+import { AuthLanding } from "./features/auth/components/AuthLanding";
+import { ControlPanel } from "./features/lab/components/ControlPanel";
+import { LabHeader } from "./features/lab/components/LabHeader";
+import { MonitorPanel } from "./features/lab/components/MonitorPanel";
+import { useBackendStatus } from "./features/lab/hooks/useBackendStatus";
+import { useSimulation } from "./features/lab/hooks/useSimulation";
 
 function App() {
   const { isLoading, isAuthenticated, error, loginWithRedirect, logout, user } =
@@ -30,6 +35,32 @@ function App() {
   const showStudentRole =
     userHasStudentRole ||
     (!hasKnownRole && preferredRole === STUDENT_ROLE_NAME);
+
+  const roleName = showProfessorRole
+    ? "Professor"
+    : showStudentRole
+      ? "Student"
+      : "Observer";
+
+  const { backendStatus, backendMessage } = useBackendStatus();
+  const {
+    simulationConfig,
+    isRunning,
+    setIsRunning,
+    history,
+    latestPoint,
+    temperatureSeries,
+    pressureSeries,
+    timelinePercent,
+    thermalPercent,
+    inletPressurePercent,
+    outletPressurePercent,
+    updateConfig,
+    resetSimulation,
+    runSingleStep,
+    applyScenario,
+    quickScenarios,
+  } = useSimulation();
 
   const startAuth = (role: RoleName, signupMode: boolean) => {
     setStoredPreferredRole(role);
@@ -54,74 +85,49 @@ function App() {
 
   if (isLoading) return <p>Loading...</p>;
 
-  return isAuthenticated ? (
-    <>
-      <p>Logged in as {user?.email}</p>
+  if (!isAuthenticated) {
+    return (
+      <AuthLanding errorMessage={error?.message} onStartAuth={startAuth} />
+    );
+  }
 
-      <h2>Assigned Roles</h2>
-      {showProfessorRole || showStudentRole ? (
-        <ul>
-          {showProfessorRole && <li>Professor</li>}
-          {showStudentRole && <li>Student</li>}
-        </ul>
-      ) : (
-        <p>
-          No supported role found. Assign the user one of these roles in Auth0:
-          professor or student.
-        </p>
-      )}
+  return (
+    <main className="lab-shell">
+      <LabHeader
+        userEmail={user?.email}
+        roleName={roleName}
+        backendStatus={backendStatus}
+        backendMessage={backendMessage}
+        hasKnownRole={hasKnownRole}
+        preferredRole={preferredRole}
+        onLogout={handleLogout}
+      />
 
-      {!hasKnownRole && preferredRole && (
-        <p>
-          Using selected role from login: {roleLabel(preferredRole)}. Configure
-          an Auth0 Action to include role claims in tokens for strict role
-          enforcement.
-        </p>
-      )}
+      <section className="layout-grid">
+        <ControlPanel
+          simulationConfig={simulationConfig}
+          isRunning={isRunning}
+          showProfessorRole={showProfessorRole}
+          quickScenarios={quickScenarios}
+          onUpdateConfig={updateConfig}
+          onToggleRun={() => setIsRunning((running) => !running)}
+          onRunSingleStep={runSingleStep}
+          onResetSimulation={() => resetSimulation()}
+          onApplyScenario={applyScenario}
+        />
 
-      {showProfessorRole && (
-        <section>
-          <h3>Professor Panel</h3>
-          <p>Professor-only tools can be rendered here.</p>
-        </section>
-      )}
-
-      {showStudentRole && (
-        <section>
-          <h3>Student Panel</h3>
-          <p>Student-only tools can be rendered here.</p>
-        </section>
-      )}
-
-      <h1>User Profile</h1>
-
-      <pre>{JSON.stringify(user, null, 2)}</pre>
-
-      <button onClick={handleLogout}>Logout</button>
-    </>
-  ) : (
-    <>
-      {error && <p>Error: {error.message}</p>}
-
-      <h2>Choose Your Role</h2>
-      <p>Select how you want to continue:</p>
-
-      <button onClick={() => startAuth(PROFESSOR_ROLE_NAME, false)}>
-        Login as Professor
-      </button>
-
-      <button onClick={() => startAuth(STUDENT_ROLE_NAME, false)}>
-        Login as Student
-      </button>
-
-      <button onClick={() => startAuth(PROFESSOR_ROLE_NAME, true)}>
-        Signup as Professor
-      </button>
-
-      <button onClick={() => startAuth(STUDENT_ROLE_NAME, true)}>
-        Signup as Student
-      </button>
-    </>
+        <MonitorPanel
+          latestPoint={latestPoint}
+          timelinePercent={timelinePercent}
+          thermalPercent={thermalPercent}
+          inletPressurePercent={inletPressurePercent}
+          outletPressurePercent={outletPressurePercent}
+          temperatureSeries={temperatureSeries}
+          pressureSeries={pressureSeries}
+          history={history}
+        />
+      </section>
+    </main>
   );
 }
 
