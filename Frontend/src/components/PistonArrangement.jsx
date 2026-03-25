@@ -31,7 +31,7 @@ const PistonArrangement = ({ volume, ratio, min, max, onVolumeChange }) => {
         />
         <rect
           x="68"
-          y="pistonY + 14"
+          y={pistonY + 14}
           width="84"
           height={150 - (pistonY + 14)}
           className="fill-cyan-500/30 transition-all duration-300"

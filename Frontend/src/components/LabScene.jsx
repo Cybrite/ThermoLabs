@@ -39,14 +39,15 @@ const FlowHint = () => (
 
 const LabScene = ({ state, derived, config, actions }) => {
   return (
-    <section className="space-y-4">
+    <section className="min-w-0 space-y-4">
       <div className="rounded-2xl border border-cyan-300/25 bg-slate-900/40 p-3">
         <FlowHint />
       </div>
 
-      <div className="grid gap-4 xl:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 2xl:grid-cols-4">
         <Compressor
           onCompress={actions.compressGas}
+          onRelease={actions.expandGas}
           disabled={!state.powerOn}
         />
         <PressureGauge
