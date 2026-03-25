@@ -47,14 +47,14 @@ const Compressor = ({ onCompress, onRelease, disabled }) => {
             disabled={disabled}
             className={`${buttonClass} border-cyan-300/50 bg-cyan-500/10 text-cyan-100 hover:bg-cyan-500/20`}
           >
-            Increase Pressure
+            Inc. Press.
           </button>
           <button
             onClick={onRelease}
             disabled={disabled}
             className={`${buttonClass} border-emerald-300/50 bg-emerald-500/10 text-emerald-100 hover:bg-emerald-500/20`}
           >
-            Decrease Pressure
+            Dec. Press.
           </button>
         </div>
       </div>
