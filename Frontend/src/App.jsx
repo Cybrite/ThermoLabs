@@ -8,16 +8,16 @@ const LabWorkspace = () => {
   const { state, config, derived, actions } = useLab();
 
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_top,#1d3557,#0b1220_48%,#060912)] text-slate-100">
+    <main className="min-h-screen bg-[radial-gradient(circle_at_top,#1f2937,#111827_46%,#090d14)] text-slate-100">
       <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <header className="mb-6 rounded-2xl border border-cyan-300/25 bg-slate-900/70 p-6 shadow-[0_0_80px_rgba(34,211,238,0.08)]">
-          <p className="text-xs uppercase tracking-[0.3em] text-cyan-200/90">
+        <header className="mb-6 rounded-2xl border border-slate-500/40 bg-slate-900/80 p-6 shadow-[0_20px_45px_rgba(2,6,23,0.55)]">
+          <p className="text-xs uppercase tracking-[0.3em] text-emerald-200/85">
             Virtual Thermodynamics Lab
           </p>
           <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
             Joule-Thomson Experiment Simulator
           </h1>
-          <p className="mt-3 max-w-3xl text-sm text-slate-300 sm:text-base">
+          <p className="mt-3 max-w-3xl text-sm text-slate-300/95 sm:text-base">
             Interact with compressor, piston, and controls to observe how
             pressure-volume changes influence temperature in a simplified
             Joule-Thomson process.
