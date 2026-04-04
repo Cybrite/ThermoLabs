@@ -1,13 +1,12 @@
 #include <iostream>
 #include "joule_thompson.hpp"
-// #include "./include/joule_thompson.hpp"
 #include <cstdlib>
 
 using namespace std;
 
 int main(int argc, char* argv[]) {
     if (argc < 6) {
-        cout << "Usage: ./temp P1 P2 T dt totalTime\n";
+        cout << "Usage: ./jt_sim P1 P2 T dt totalTime\n";
         return 1;
     }
 
@@ -18,13 +17,8 @@ int main(int argc, char* argv[]) {
     double totalTime = atof(argv[5]);
 
     JouleThomsonSimulation sim(P1, P2, T, dt, totalTime);
-    sim.run();          // prints data
-    sim.displayFinal(); // final state
-
-    //demo func
-    for(int i = 1; i<=5; i++){
-        cout << "Hello world" << " " << i << endl;
-    }
+    sim.run();
+    sim.displayFinal();
 
     return 0;
 }
