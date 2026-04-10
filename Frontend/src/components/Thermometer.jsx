@@ -1,5 +1,55 @@
-const Thermometer = ({ temperature, ratio }) => {
+import { useId } from "react";
+
+const Thermometer = ({ temperature, ratio, embedded = false }) => {
+  const gradientId = useId();
   const fillHeight = 200 * ratio;
+
+  if (embedded) {
+    return (
+      <div className="flex flex-col items-center">
+        <svg viewBox="0 0 150 280" className="h-36 w-12">
+          <defs>
+            <linearGradient id={gradientId} x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0%" stopColor="#fca5a5" />
+              <stop offset="100%" stopColor="#991b1b" />
+            </linearGradient>
+          </defs>
+
+          <rect
+            x="55"
+            y="30"
+            width="30"
+            height="200"
+            rx="15"
+            className="fill-slate-100 stroke-slate-500"
+            strokeWidth="2"
+          />
+
+          <rect
+            x="62"
+            y={230 - fillHeight}
+            width="16"
+            height={fillHeight}
+            rx="8"
+            fill={`url(#${gradientId})`}
+            className="transition-all duration-500"
+          />
+
+          <circle
+            cx="70"
+            cy="238"
+            r="20"
+            fill={`url(#${gradientId})`}
+            className="stroke-rose-300"
+            strokeWidth="2"
+          />
+        </svg>
+        <p className="mt-1 rounded-md border border-slate-500/70 bg-slate-900/75 px-1.5 py-0.5 text-[10px] font-mono text-slate-100">
+          {temperature.toFixed(1)} C
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="lab-card">

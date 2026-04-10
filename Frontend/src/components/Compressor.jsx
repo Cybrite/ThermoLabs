@@ -1,7 +1,58 @@
 const buttonClass =
   "rounded-lg border px-3 py-2 text-sm font-semibold transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50";
 
-const Compressor = ({ onCompress, onRelease, disabled }) => {
+const Compressor = ({ onCompress, onRelease, disabled, embedded = false }) => {
+  if (embedded) {
+    return (
+      <div className="rounded-xl border border-slate-500/45 bg-slate-900/75 p-2.5 shadow-[0_10px_24px_rgba(2,8,25,0.5)]">
+        <svg viewBox="0 0 220 120" className="h-16 w-full">
+          <rect
+            x="20"
+            y="40"
+            width="120"
+            height="48"
+            rx="10"
+            className="fill-slate-700"
+          />
+          <rect
+            x="138"
+            y="48"
+            width="22"
+            height="32"
+            rx="5"
+            className="fill-cyan-300"
+          />
+          <circle cx="184" cy="64" r="20" className="fill-slate-600" />
+          <circle cx="184" cy="64" r="8" className="fill-cyan-200" />
+          <path
+            d="M52 34 L66 26 L66 31 L96 31 L96 37 L66 37 L66 42 Z"
+            className="fill-cyan-200/80"
+          />
+          <path
+            d="M128 90 L114 98 L114 93 L84 93 L84 87 L114 87 L114 82 Z"
+            className="fill-emerald-200/80"
+          />
+        </svg>
+        <div className="mt-2 grid grid-cols-2 gap-2">
+          <button
+            onClick={onCompress}
+            disabled={disabled}
+            className={`${buttonClass} border-cyan-300/45 bg-cyan-500/15 px-2 py-1 text-[11px] text-cyan-100 hover:bg-cyan-500/25`}
+          >
+            Compress
+          </button>
+          <button
+            onClick={onRelease}
+            disabled={disabled}
+            className={`${buttonClass} border-emerald-300/45 bg-emerald-500/15 px-2 py-1 text-[11px] text-emerald-100 hover:bg-emerald-500/25`}
+          >
+            Expand
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="lab-card">
       <h3 className="lab-card-title">Compressor</h3>
