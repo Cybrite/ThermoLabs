@@ -1,8 +1,12 @@
+const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
 const PressureGauge = ({ pressure, ratio }) => {
-  const angle = -120 + ratio * 240;
+  const boundedRatio = clamp(ratio, 0, 1);
+  const angle = -180 + boundedRatio * 180;
   const radians = (angle * Math.PI) / 180;
-  const x = 70 + Math.cos(radians) * 44;
-  const y = 70 + Math.sin(radians) * 44;
+  const x = 70 + Math.cos(radians) * 50;
+  const y = 90 + Math.sin(radians) * 50;
+  const gaugeLength = 157;
 
   return (
     <div className="lab-card">
@@ -19,18 +23,18 @@ const PressureGauge = ({ pressure, ratio }) => {
           fill="none"
           className="stroke-cyan-400"
           strokeWidth="8"
-          strokeDasharray={`${ratio * 157} 157`}
+          strokeDasharray={`${boundedRatio * gaugeLength} ${gaugeLength}`}
         />
 
         <line
           x1="70"
-          y1="70"
+          y1="90"
           x2={x}
           y2={y}
           className="stroke-amber-300 transition-all duration-500"
           strokeWidth="3"
         />
-        <circle cx="70" cy="70" r="5" className="fill-amber-200" />
+        <circle cx="70" cy="90" r="5" className="fill-amber-200" />
       </svg>
       <p className="lab-value">{pressure.toFixed(2)} bar</p>
     </div>
