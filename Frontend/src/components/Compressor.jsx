@@ -1,10 +1,24 @@
 const buttonClass =
   "rounded-lg border px-3 py-2 text-sm font-semibold transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50";
 
-const Compressor = ({ onCompress, onRelease, disabled, embedded = false }) => {
+const Compressor = ({
+  onCompress,
+  onRelease,
+  disabled,
+  embedded = false,
+  tone = "dark",
+}) => {
   if (embedded) {
+    const isLight = tone === "light";
+
     return (
-      <div className="rounded-xl border border-slate-500/45 bg-slate-900/75 p-2.5 shadow-[0_10px_24px_rgba(2,8,25,0.5)]">
+      <div
+        className={`rounded-xl p-2.5 ${
+          isLight
+            ? "border border-slate-300 bg-slate-50 shadow-[0_8px_16px_rgba(15,23,42,0.1)]"
+            : "border border-slate-500/45 bg-slate-900/75 shadow-[0_10px_24px_rgba(2,8,25,0.5)]"
+        }`}
+      >
         <svg viewBox="0 0 220 120" className="h-16 w-full">
           <rect
             x="20"
@@ -37,14 +51,22 @@ const Compressor = ({ onCompress, onRelease, disabled, embedded = false }) => {
           <button
             onClick={onCompress}
             disabled={disabled}
-            className={`${buttonClass} border-cyan-300/45 bg-cyan-500/15 px-2 py-1 text-[11px] text-cyan-100 hover:bg-cyan-500/25`}
+            className={`${buttonClass} px-2 py-1 text-[11px] ${
+              isLight
+                ? "border-cyan-500/40 bg-cyan-500/10 text-cyan-800 hover:bg-cyan-500/20"
+                : "border-cyan-300/45 bg-cyan-500/15 text-cyan-100 hover:bg-cyan-500/25"
+            }`}
           >
             Compress
           </button>
           <button
             onClick={onRelease}
             disabled={disabled}
-            className={`${buttonClass} border-emerald-300/45 bg-emerald-500/15 px-2 py-1 text-[11px] text-emerald-100 hover:bg-emerald-500/25`}
+            className={`${buttonClass} px-2 py-1 text-[11px] ${
+              isLight
+                ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-800 hover:bg-emerald-500/20"
+                : "border-emerald-300/45 bg-emerald-500/15 text-emerald-100 hover:bg-emerald-500/25"
+            }`}
           >
             Expand
           </button>

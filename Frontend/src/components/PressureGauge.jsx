@@ -1,12 +1,13 @@
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
-const PressureGauge = ({ pressure, ratio, compact = false }) => {
+const PressureGauge = ({ pressure, ratio, compact = false, tone = "dark" }) => {
   const boundedRatio = clamp(ratio, 0, 1);
   const angle = -180 + boundedRatio * 180;
   const radians = (angle * Math.PI) / 180;
   const x = 70 + Math.cos(radians) * 50;
   const y = 90 + Math.sin(radians) * 50;
   const gaugeLength = 157;
+  const isLight = tone === "light";
 
   if (compact) {
     return (
@@ -15,7 +16,7 @@ const PressureGauge = ({ pressure, ratio, compact = false }) => {
           <path
             d="M20 90 A50 50 0 0 1 120 90"
             fill="none"
-            className="stroke-slate-300"
+            className={isLight ? "stroke-slate-500" : "stroke-slate-300"}
             strokeWidth="8"
           />
           <path
@@ -35,7 +36,13 @@ const PressureGauge = ({ pressure, ratio, compact = false }) => {
           />
           <circle cx="70" cy="90" r="5" className="fill-amber-200" />
         </svg>
-        <p className="rounded-md border border-slate-500/70 bg-slate-900/75 px-2 py-1 text-[11px] font-mono text-slate-100">
+        <p
+          className={`rounded-md px-2 py-1 text-[11px] font-mono ${
+            isLight
+              ? "border border-slate-300 bg-white text-slate-800"
+              : "border border-slate-500/70 bg-slate-900/75 text-slate-100"
+          }`}
+        >
           {pressure.toFixed(2)} bar
         </p>
       </div>

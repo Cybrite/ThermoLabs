@@ -44,7 +44,7 @@ const Thermometer = ({ temperature, ratio, embedded = false }) => {
             strokeWidth="2"
           />
         </svg>
-        <p className="mt-1 rounded-md border border-slate-500/70 bg-slate-900/75 px-1.5 py-0.5 text-[10px] font-mono text-slate-100">
+        <p className="mt-1 rounded-md border border-slate-300 bg-white px-1.5 py-0.5 text-[10px] font-mono text-slate-700">
           {temperature.toFixed(1)} C
         </p>
       </div>
