@@ -7,6 +7,7 @@ const Compressor = ({
   disabled,
   embedded = false,
   tone = "dark",
+  isRunning = false,
 }) => {
   if (embedded) {
     const isLight = tone === "light";
@@ -34,10 +35,15 @@ const Compressor = ({
             width="22"
             height="32"
             rx="5"
-            className="fill-cyan-300"
+            className={isRunning ? "fill-cyan-400 animate-pulse" : "fill-cyan-300"}
           />
           <circle cx="184" cy="64" r="20" className="fill-slate-600" />
-          <circle cx="184" cy="64" r="8" className="fill-cyan-200" />
+          <circle
+            cx="184"
+            cy="64"
+            r="8"
+            className={isRunning ? "fill-emerald-300 animate-pulse" : "fill-cyan-200"}
+          />
           <path
             d="M52 34 L66 26 L66 31 L96 31 L96 37 L66 37 L66 42 Z"
             className="fill-cyan-200/80"
@@ -95,14 +101,14 @@ const Compressor = ({
             width="22"
             height="32"
             rx="5"
-            className="fill-cyan-300"
+            className={isRunning ? "fill-cyan-400 animate-pulse" : "fill-cyan-300"}
           />
           <circle cx="184" cy="64" r="20" className="fill-slate-600" />
           <circle
             cx="184"
             cy="64"
             r="8"
-            className="fill-cyan-200 transition-transform duration-300 group-hover:scale-125"
+            className={`fill-cyan-200 transition-transform duration-300 ${isRunning ? "animate-pulse" : "group-hover:scale-125"}`}
           />
           <path
             d="M52 34 L66 26 L66 31 L96 31 L96 37 L66 37 L66 42 Z"
@@ -120,14 +126,14 @@ const Compressor = ({
             disabled={disabled}
             className={`${buttonClass} border-cyan-300/50 bg-cyan-500/10 text-cyan-100 hover:bg-cyan-500/20`}
           >
-            Inc. Press.
+            Compress
           </button>
           <button
             onClick={onRelease}
             disabled={disabled}
             className={`${buttonClass} border-emerald-300/50 bg-emerald-500/10 text-emerald-100 hover:bg-emerald-500/20`}
           >
-            Dec. Press.
+            Expand
           </button>
         </div>
       </div>

@@ -26,7 +26,7 @@ const LabWorkspace = () => {
           <p className="mt-3 max-w-3xl text-sm text-slate-300/95 sm:text-base">
             Interact with compressor, piston, and controls to observe how
             pressure-volume changes influence temperature in a simplified
-            Joule-Thomson process.
+            Joule-Thomson process. Data streams live from the backend simulation.
           </p>
         </header>
 
@@ -39,11 +39,13 @@ const LabWorkspace = () => {
           />
           <div className="min-w-0 space-y-4">
             <SwitchPanel
-              onCompress={actions.compressGas}
-              onExpand={actions.expandGas}
+              onStartSimulation={actions.startSimulation}
+              onStopSimulation={actions.stopSimulation}
               onReset={actions.resetSystem}
-              onTogglePower={actions.togglePower}
-              powerOn={state.powerOn}
+              connected={state.connected}
+              isRunning={state.isRunning}
+              P1={state.p1Pa}
+              P2={state.p2Pa}
             />
             <ControllerPanel
               state={state}
