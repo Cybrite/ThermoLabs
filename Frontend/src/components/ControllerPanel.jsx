@@ -32,10 +32,10 @@ const ControllerPanel = ({ state, config, onIntensityChange }) => {
 
       {/* ── simulation status ─────────────────────────── */}
       <div className="mb-4 rounded-lg border border-slate-600/80 bg-slate-950/85 p-3">
-        <p className="mb-2 text-xs uppercase tracking-[0.2em] text-slate-300">
+        <p className="mb-2 text-[11px] uppercase tracking-[0.2em] text-slate-300">
           Simulation Status
         </p>
-        <div className="space-y-1.5 text-sm">
+        <div className="space-y-1.5 text-xs">
           <div className={rowClass}>
             <span>Connection</span>
             <span className="flex items-center gap-1.5 font-semibold">
@@ -94,7 +94,7 @@ const ControllerPanel = ({ state, config, onIntensityChange }) => {
       </div>
 
       {/* ── live readings ─────────────────────────────── */}
-      <div className="space-y-2 text-base">
+      <div className="space-y-2 text-sm">
         <div className={rowClass}>
           <span>P1 (Inlet)</span>
           <span className="font-mono text-cyan-200">
@@ -117,10 +117,10 @@ const ControllerPanel = ({ state, config, onIntensityChange }) => {
 
       {/* ── temperature data ──────────────────────────── */}
       <div className="mt-4 rounded-lg border border-slate-600/80 bg-slate-950/85 p-3">
-        <p className="mb-2 text-xs uppercase tracking-[0.2em] text-slate-300">
+        <p className="mb-2 text-[11px] uppercase tracking-[0.2em] text-slate-300">
           Temperature Data
         </p>
-        <div className="space-y-1.5 text-sm">
+        <div className="space-y-1.5 text-xs">
           <div className={rowClass}>
             <span>Sensor °C</span>
             <span className="font-mono text-rose-200">
