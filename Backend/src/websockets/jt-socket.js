@@ -15,7 +15,7 @@
 import { JTSimulation } from "../simulation/jt-simulation.js";
 
 const PACKET_INTERVAL_MS = 5000; // send a packet every 5 real-time seconds
-const TOTAL_PACKETS = 720;       // 3600s / 5 data-points per packet
+const TOTAL_PACKETS = 180;       // 900s / 5 data-points per packet
 
 /**
  * Register JT simulation events on a Socket.IO server instance.

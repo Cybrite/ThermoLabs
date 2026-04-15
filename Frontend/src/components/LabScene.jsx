@@ -60,11 +60,11 @@ const fmtTime = (seconds) => {
 
 /* ── live value pill ──────────────────────────────────────── */
 const LivePill = ({ label, value, unit, color = "text-slate-800" }) => (
-  <div className="flex flex-col items-center rounded-lg border border-slate-300/80 bg-white px-3 py-1.5 shadow-sm">
-    <span className="text-[9px] uppercase tracking-[0.18em] text-slate-500">
+  <div className="flex flex-col items-center rounded-lg border border-slate-300/80 bg-white px-4 py-2 shadow-sm">
+    <span className="text-[10px] uppercase tracking-[0.18em] text-slate-500">
       {label}
     </span>
-    <span className={`font-mono text-sm font-semibold ${color}`}>
+    <span className={`font-mono text-lg font-semibold ${color}`}>
       {value}
       <span className="ml-0.5 text-[10px] font-normal text-slate-500">
         {unit}
@@ -355,16 +355,16 @@ const ExperimentSetup = ({ state, derived, actions, config }) => {
 
         <div className="h-4 rounded-sm bg-gradient-to-r from-slate-500 via-slate-300 to-slate-500" />
 
-        <div className="mt-2 grid grid-cols-2 text-center text-sm font-medium text-slate-600 sm:text-[1.7rem]">
+        <div className="mt-2 grid grid-cols-2 text-center text-base font-medium text-slate-600 sm:text-[1.8rem]">
           <div>
             <p>Compartment 1</p>
-            <p className="font-mono text-lg sm:text-2xl">
+            <p className="font-mono text-xl sm:text-3xl">
               {p1Bar.toFixed(2)} bar
             </p>
           </div>
           <div>
             <p>Compartment 2</p>
-            <p className="font-mono text-lg sm:text-2xl">
+            <p className="font-mono text-xl sm:text-3xl">
               {p2Bar.toFixed(2)} bar
             </p>
           </div>
@@ -450,7 +450,7 @@ const LabScene = ({ state, derived, config, actions }) => {
 
         <div className="lab-card">
           <h3 className="lab-card-title">Compartment Relations</h3>
-          <div className="space-y-2 text-sm text-slate-200">
+          <div className="space-y-2 text-base text-slate-200">
             <div className="flex items-center justify-between rounded-md bg-slate-900/75 px-3 py-2">
               <span>Temperature Gradient</span>
               <span className="font-mono">

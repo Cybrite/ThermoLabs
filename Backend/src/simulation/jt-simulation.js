@@ -1,22 +1,13 @@
 /**
  * Joule-Thomson Simulation Engine (JavaScript port)
- *
- * Mirrors the C++ JouleThomsonSimulation class logic.
- * Fixed parameters: dt = 1s, totalTime = 3600s (1 hour).
+ * Authentic Chemical Engineering Literature Model (Nitrogen)
+ * Reference: Smith, Van Ness, Abbott / Perry's Chemical Engineers' Handbook
  */
 
-/**
- * Determine the initial temperature from inlet and outlet pressures.
- * TODO: Replace with a real thermodynamic model.
- *
- * @param {number} P1 - Inlet pressure (Pa)
- * @param {number} P2 - Outlet pressure (Pa)
- * @returns {number} Initial temperature (K)
- */
-function determineTemperature(P1, P2) {
-    // Placeholder — always returns 300 K for now
-    return 300;
-}
+// Literature value for Nitrogen (N2) at ~300 K
+// mu_JT approx 0.22 K/bar = 2.2e-6 K/Pa
+const N2_MU_JT = 2.2e-6; 
+const INITIAL_T = 300.0; // Standard room temperature (K)
 
 class JTSimulation {
     /**
@@ -24,41 +15,36 @@ class JTSimulation {
      * @param {number} P2 - Outlet pressure (Pa)
      */
     constructor(P1, P2) {
-        this.dt = 1;                // fixed time step (seconds)
-        this.totalTime = 3600;      // fixed total duration (seconds)
+        this.dt = 1;                  // fixed time step (seconds)
+        this.totalTime = 900;         // 15 minutes to reach steady state
         this.currentTime = 0;
 
         this.P1 = P1;
         this.P2 = P2;
-        this.T = determineTemperature(P1, P2);
-        this.muJT = this._computeMuJT(this.T, this.P1);
+        this.T = INITIAL_T;
+        
+        // Theoretical steady-state temperature after the throttle valve
+        this.targetT = INITIAL_T + N2_MU_JT * (this.P2 - this.P1);
+        
+        // Convergence rate (k) tuned for 15 min. (e^-kt -> 0.01 over 900s implies k ~ 0.005)
+        this.k = 0.005;
     }
 
     /**
      * Gaussian noise generator (Box-Muller transform).
-     * @param {number} sigma - Standard deviation (default 0.05)
+     * @param {number} sigma - Standard deviation
      * @returns {number}
      */
     _noise(sigma = 0.05) {
         const u1 = Math.random();
         const u2 = Math.random();
-        const z = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
+        const z = Math.sqrt(-2.0 * Math.log(u1 + 1e-9)) * Math.cos(2.0 * Math.PI * u2);
         return z * sigma;
     }
 
     /**
-     * Joule-Thomson coefficient approximation.
-     * Same formula as the C++ implementation.
-     * @param {number} T - Temperature (K)
-     * @param {number} P - Pressure (Pa)
-     * @returns {number}
-     */
-    _computeMuJT(T, P) {
-        return (1e-5) * (300.0 / T) * (P / 1e5);
-    }
-
-    /**
      * Advance the simulation by one time step (dt = 1s).
+     * The thermometer slowly converges to the target theoretical T.
      * @returns {{ time: number, pressure: number, temperature: number }}
      */
     step() {
@@ -66,23 +52,20 @@ class JTSimulation {
             return null; // simulation complete
         }
 
-        const dP = (this.P2 - this.P1) * (this.dt / this.totalTime);
-        this.muJT = this._computeMuJT(this.T, this.P1);
-
-        let dT = this.muJT * dP;
-
-        // Add noise
-        dT += this._noise();
-        const dPNoisy = dP + this._noise();
-
+        // Exponential thermal convergence
+        const dT = this.k * (this.targetT - this.T) * this.dt;
         this.T += dT;
-        this.P1 += dPNoisy;
+
         this.currentTime += this.dt;
+
+        // Apply sensor noise only for reporting, internal state remains ideal
+        const reportedT = this.T + this._noise(0.02);
+        const reportedP1 = this.P1 + this._noise(500); // 500 Pa noise on a high pressure sensor
 
         return {
             time: this.currentTime,
-            pressure: this.P1,
-            temperature: this.T,
+            pressure: reportedP1, 
+            temperature: reportedT,
         };
     }
 
@@ -108,16 +91,16 @@ class JTSimulation {
     }
 
     /**
-     * Update P1 and P2 mid-session. Timer continues; new values take effect
-     * immediately on subsequent steps.
+     * Update P1 and P2 mid-session.
+     * The target temperature shifts immediately, and the current T 
+     * begins converging toward the new target.
      * @param {number} newP1 - New inlet pressure (Pa)
      * @param {number} newP2 - New outlet pressure (Pa)
      */
     updatePressures(newP1, newP2) {
         this.P1 = newP1;
         this.P2 = newP2;
-        this.T = determineTemperature(newP1, newP2);
-        this.muJT = this._computeMuJT(this.T, this.P1);
+        this.targetT = INITIAL_T + N2_MU_JT * (newP2 - newP1);
     }
 
     /**
@@ -127,8 +110,8 @@ class JTSimulation {
     getFinalState() {
         return {
             time: this.currentTime,
-            pressure: this.P1,
-            temperature: this.T,
+            pressure: this.P1 + this._noise(500),
+            temperature: this.T + this._noise(0.02),
         };
     }
 
@@ -138,4 +121,4 @@ class JTSimulation {
     }
 }
 
-export { JTSimulation, determineTemperature };
+export { JTSimulation };
