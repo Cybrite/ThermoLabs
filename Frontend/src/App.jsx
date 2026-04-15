@@ -1,7 +1,13 @@
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import LabScene from "./components/LabScene";
 import ControllerPanel from "./components/ControllerPanel";
 import SwitchPanel from "./components/SwitchPanel";
+import AuthGate from "./components/AuthGate";
+import AuthPage from "./components/AuthPage";
+import RoleDashboard from "./components/RoleDashboard";
+import { AuthProvider } from "./context/AuthContext";
 import { LabProvider } from "./context/LabContext";
+import { useAuth } from "./hooks/useAuth";
 import { useLab } from "./hooks/useLab";
 
 const LabWorkspace = () => {
@@ -51,11 +57,58 @@ const LabWorkspace = () => {
   );
 };
 
+const PublicEntry = () => {
+  const { isAuthenticated, user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <main className="grid min-h-screen place-items-center bg-slate-950 text-slate-100">
+        <p className="text-sm uppercase tracking-[0.2em] text-slate-300">
+          Loading session...
+        </p>
+      </main>
+    );
+  }
+
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace state={{ role: user?.role }} />;
+  }
+
+  return <AuthPage />;
+};
+
+const StudentLabPage = () => (
+  <LabProvider>
+    <LabWorkspace />
+  </LabProvider>
+);
+
 function App() {
   return (
-    <LabProvider>
-      <LabWorkspace />
-    </LabProvider>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<PublicEntry />} />
+          <Route
+            path="/dashboard"
+            element={
+              <AuthGate>
+                <RoleDashboard />
+              </AuthGate>
+            }
+          />
+          <Route
+            path="/lab/joule-thomson"
+            element={
+              <AuthGate allowedRoles={["student"]}>
+                <StudentLabPage />
+              </AuthGate>
+            }
+          />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 
