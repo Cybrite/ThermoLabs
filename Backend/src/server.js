@@ -34,7 +34,7 @@ const io = new SocketIOServer(httpServer, {
 // Register WebSocket handlers
 registerJTSocket(io);
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {
   try {
